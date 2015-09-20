@@ -1,16 +1,14 @@
 <?php
 
 class LoginView {
-	private static $login = 'LoginView::Login';
-	private static $logout = 'LoginView::Logout';
-	private static $name = 'LoginView::UserName';
-	private static $password = 'LoginView::Password';
-	private static $cookieName = 'LoginView::CookieName';
-	private static $cookiePassword = 'LoginView::CookiePassword';
-	private static $keep = 'LoginView::KeepMeLoggedIn';
-	private static $messageId = 'LoginView::Message';
-
-	
+	private static $login 			= 'LoginView::Login';
+	private static $logout 			= 'LoginView::Logout';
+	private static $name 			= 'LoginView::UserName';
+	private static $password 		= 'LoginView::Password';
+	private static $cookieName 		= 'LoginView::CookieName';
+	private static $cookiePassword 	= 'LoginView::CookiePassword';
+	private static $keep 			= 'LoginView::KeepMeLoggedIn';
+	private static $messageId 		= 'LoginView::Message';
 
 	/**
 	 * Create HTTP response
@@ -19,8 +17,7 @@ class LoginView {
 	 *
 	 * @return  void BUT writes to standard output and cookies!
 	 */
-	public function response() {
-		$message = '';
+	public function response($message) {
 		
 		$response = $this->generateLoginFormHTML($message);
 		//$response .= $this->generateLogoutButtonHTML($message);
@@ -54,23 +51,45 @@ class LoginView {
 					<p id="' . self::$messageId . '">' . $message . '</p>
 					
 					<label for="' . self::$name . '">Username :</label>
-					<input type="text" id="' . self::$name . '" name="' . self::$name . '" value="" />
+					<input value="'.$_POST[self::$name].'" type="text" id="' . self::$name . '" name="' . self::$name . '" value="" />
 
 					<label for="' . self::$password . '">Password :</label>
 					<input type="password" id="' . self::$password . '" name="' . self::$password . '" />
 
 					<label for="' . self::$keep . '">Keep me logged in  :</label>
-					<input type="checkbox" id="' . self::$keep . '" name="' . self::$keep . '" />
+					<input type="checkbox" id="' . self::$keep . '" name="' . self::$keep . '" '. $this->getChecked(self::$keep) .' />
 					
 					<input type="submit" name="' . self::$login . '" value="login" />
 				</fieldset>
 			</form>
-		';
+		'; 
 	}
-	
-	//CREATE GET-FUNCTIONS TO FETCH REQUEST VARIABLES
+
 	private function getRequestUserName() {
-		//RETURN REQUEST VARIABLE: USERNAME
+		return $_POST[self::$name];
+	}
+
+	private function getRequestPassword() {
+		return $_POST[self::$password];
+	}
+
+	private function getRequestKeep() {
+		return isset($_POST[self::$keep]) ? true : false;
+	}
+
+	private function getChecked($key) {
+		return isset($_POST[$key]) ? "checked" : "";
+	}
+
+	public function isPost() {
+		return !empty($_POST);
+	}
+
+	public function getData() {
+		return array("username" => $this->getRequestUserName(),
+					 "password" => $this->getRequestPassword(),
+					 "keep" 	=> $this->getRequestKeep()
+					 );
 	}
 	
 }
