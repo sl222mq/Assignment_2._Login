@@ -10,7 +10,7 @@ class DateTimeView {
 					  $date->format("jS").
 					  " of ".
 					  $date->format("F Y"). 
-					  ", the time is ".
+					  ", The time is ".
 					  $date->format("H:i:s"); 
 
 		return '<p>' . $timeString . '</p>';

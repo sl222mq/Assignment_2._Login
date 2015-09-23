@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 require_once('view/LoginView.php');
 require_once('view/DateTimeView.php');
 require_once('view/LayoutView.php');
@@ -10,16 +12,15 @@ error_reporting(E_ALL);
 ini_set('display_errors', 'On');
 
 // creates instances of classes
-$loginView 			= new LoginView();
+$loginModel 		= new LoginModel();
+$loginView 			= new LoginView($loginModel);
 $dateTimeView 		= new DateTimeView();
 $layoutView 		= new LayoutView();
-$loginModel 		= new LoginModel();
 $loginController 	= new LoginController($loginView, $loginModel);
 
+$loginController->doLogin();
 
-$message = $loginController->doLogin();
+$isLoggedIn = $loginModel->isLoggedIn();
 
-$isLoggedIn = $loginController->isLoggedIn();
-
-$layoutView->render($isLoggedIn, $loginView, $dateTimeView, $message);
+$layoutView->render($isLoggedIn, $loginView, $dateTimeView);
 
